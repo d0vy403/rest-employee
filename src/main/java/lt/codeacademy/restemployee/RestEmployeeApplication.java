@@ -1,67 +1,27 @@
 package lt.codeacademy.restemployee;
-import lt.codeacademy.restemployee.entity.Department;
-import lt.codeacademy.restemployee.entity.Employee;
-import lt.codeacademy.restemployee.entity.Project;
-import lt.codeacademy.restemployee.repository.DepartmentRepository;
-import lt.codeacademy.restemployee.repository.EmployeeRepository;
-import lt.codeacademy.restemployee.repository.ProjectRepository;
-import org.springframework.boot.CommandLineRunner;
+
+import lt.codeacademy.restemployee.service.EmployeeService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
 public class RestEmployeeApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(RestEmployeeApplication.class, args);
-    }
+  private final EmployeeService employeeService;
 
-  @Bean
-  CommandLineRunner runner(
-      EmployeeRepository employeeRepo,
-      ProjectRepository projectRepo,
-      DepartmentRepository departmentRepo) {
-    return args -> {
-      Department devDept = new Department("Development", "111111");
-      Department hrDept = new Department("Human Resources", "222222");
+  public RestEmployeeApplication(EmployeeService employeeService) {
+    this.employeeService = employeeService;
+  }
 
-      departmentRepo.saveAll(List.of(devDept, hrDept));
+  public static void main(String[] args) {
+    SpringApplication.run(RestEmployeeApplication.class, args);
+  }
 
-      Project projectA = new Project("Project A");
-      Project projectB = new Project("Project B");
-
-      projectRepo.saveAll(List.of(projectA, projectB));
-
-      Employee emp1 = new Employee(
-              "EMP001",
-              "John",
-              "Doe",
-              LocalDate.of(1990, 1, 15),
-              LocalDate.of(2020, 5, 1),
-              "Developer",
-              devDept,
-              projectA
-      );
-
-      Employee emp2 = new Employee(
-              "EMP002",
-              "Jane",
-              "Smith",
-              LocalDate.of(1985, 8, 22),
-              LocalDate.of(2019, 3, 10),
-              "HR Specialist",
-              hrDept,
-              projectB
-      );
-
-      employeeRepo.saveAll(List.of(emp1, emp2));
-
-      System.out.println("=== All Employees ===");
-      employeeRepo.findAll().forEach(System.out::println);
-    };
+  @EventListener(ApplicationReadyEvent.class)
+  public void insertData() {
+    employeeService.addTestEmployees();
+    System.out.println(employeeService.getAllEmployees());
   }
 }

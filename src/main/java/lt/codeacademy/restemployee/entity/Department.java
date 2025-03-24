@@ -2,6 +2,7 @@ package lt.codeacademy.restemployee.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -9,17 +10,11 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 public class Department {
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String title;
   private String managerPersonalCode;
 
-  public Department(String title, String managerPersonalCode) {
-    this.title = title;
-    this.managerPersonalCode = managerPersonalCode;
-  }
 }

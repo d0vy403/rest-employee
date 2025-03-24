@@ -1,42 +1,28 @@
 package lt.codeacademy.restemployee.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
-
+import java.util.Date;
 import lombok.*;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString(exclude = {"department", "project"})
+@ToString
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String personalCode;
-    private String name;
-    private String lastName;
-    private LocalDate birthDate;
-    private LocalDate worksFrom;
-    private String position;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne
-    private Department department;
+  private String personalCode;
+  private String name;
+  private String lastName;
+  private Date birthDate;
+  private Date worksFrom;
+  private String position;
 
-    @ManyToOne
-    private Project project;
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  private Department department;
 
-    public Employee(String personalCode, String name, String lastName, LocalDate birthDate,
-                    LocalDate worksFrom, String position, Department department, Project project) {
-        this.personalCode = personalCode;
-        this.name = name;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.worksFrom = worksFrom;
-        this.position = position;
-        this.department = department;
-        this.project = project;
-    }
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  private Project project;
 }

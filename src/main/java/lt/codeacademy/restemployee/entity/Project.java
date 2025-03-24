@@ -9,16 +9,11 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
-@AllArgsConstructor
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
 
-    public Project(String title) {
-        this.title = title;
-    }
 }
